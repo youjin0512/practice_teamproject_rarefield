@@ -21,7 +21,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 ## dbmongo의 collection 연결
 from pymongo import MongoClient
-mongoClient = MongoClient("mongodb://trainings.iptime.org:48001/")
+mongoClient = MongoClient("mongodb://trainings.iptime.org:45003/")
 # database 연결
 database = mongoClient["data_analysis"]
 # collection 작업
@@ -33,12 +33,18 @@ collection = database['persona1_navercafe_parkinsons']
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
 time.sleep(2)
 
-##############################
-##############################
+from dotenv import load_dotenv
+import os
+# 환경변수 불러오기
+load_dotenv()
+# 로그인 계정 불러오기
+id = os.getenv('id')
+pw = os.getenv('pw')
+
 
 #자바스크립트로 우회하여 아이디와 비밀번호 값 넘겨줌
-browser.execute_script("document.getElementsByName('id')[0].value = \'" + my_id + "\'") 
-browser.execute_script("document.getElementsByName('pw')[0].value = \'" + my_pw + "\'")
+browser.execute_script("document.getElementsByName('id')[0].value = \'" + id + "\'") 
+browser.execute_script("document.getElementsByName('pw')[0].value = \'" + pw + "\'")
 
 browser.find_element(by=By.CSS_SELECTOR, value='.btn_login').click() #로그인 버튼 클릭
 time.sleep(1)
@@ -58,70 +64,47 @@ browser.find_element(by=By.CSS_SELECTOR, value='#main-area > div:nth-child(4) > 
 time.sleep(1)
 
 
-for i in range(100):
-    try:
+# review_contents = []  # 댓글         
+# reply = [] # 댓글의 댓글
+for i in range():
+    try :
+        time.sleep(2)
         title=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_header > div.ArticleTitle > div > h3').text # 글 제목 추출
         name=browser.find_element(by=By.CSS_SELECTOR, value='.nickname').text #작성자 추출
         date=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_header > div.WriterInfo > div.profile_area > div.article_info > span.date').text #작성일 추출
         contents=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_container > div.article_viewer > div > div.content.CafeViewer > div > div').text #글내용 추출
-        
-        
-        # 댓글 영역 가져오기(리스트로 몽고db에 업로드)
-        try:
-            review = browser.find_elements(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_container > div.CommentBox > ul')  # 댓글 영역
-            review_contents = browser.find_element(by=By.CSS_SELECTOR, value='div > div > div.comment_text_box > p > span')  # 댓글내용
-        except:
-            pass
-        
-        # print('<',i+1,'번째 글> : ',title)
-        # print(title, name, date, contents)
-        # print('')
-        
-        # data={
-        #     'cafe' : '파킨슨병',  # 카페 이름
-        #     'title' : title,
-        #     'name' : name,
-        #     'date' : date,
-        #     'contents' : contents,
-        #     'review' : review_contents
-        # }
-            
-        # collection.insert_one(data)
-        # # browser.find_element(by=By.CSS_SELECTOR, value='a.BaseButton.btn_next').click() #다음글 버튼 클릭
-        # # time.sleep(3)
-        
-        
-    
+        num = browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_container > div.ReplyBox > div.box_left > a > strong').text
+        num = int(num)
+        if num != 0:
+            reply_list = []
+            for j in range(num): 
+                reply = browser.find_element(by=By.XPATH, value=f'/html/body/div/div/div/div[2]/div[2]/div[5]/ul/li[{j+1}]/div/div/div[2]/p/span').text
+                reply_list.append(reply)
+        else : 
+            reply_list = ""
+
+        print(reply_list)
+                
     except :
         pass
-        # try:
-        #     title=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_header > div.ArticleTitle > div > h3').text #글제목 추출
-        #     name=browser.find_element(by=By.CSS_SELECTOR, value='.nickname').text #작성자 추출
-        #     date=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_header > div.WriterInfo > div.profile_area > div.article_info > span.date').text #작성일 추출
-        #     contents=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_container > div.article_viewer > div > div.content.CafeViewer > div > div').text #글내용 추출
-        # except:
-        #    contents= ""
-        
-        # collection.insert_one(data)
-        
-        # browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleTopBtns > div.right_area > a.BaseButton.btn_next.BaseButton--skinGray.size_default').click() #다음글 버튼 클릭
 
-
-    browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleTopBtns > div.right_area > a.BaseButton.btn_next.BaseButton--skinGray.size_default').click() #이전글 옆다음글 버튼 클릭
-    time.sleep(3)    
-    
     data={
     'cafe' : '파킨슨병',  # 카페 이름
     'title' : title,
     'name' : name,
     'date' : date,
     'contents' : contents,
-    'review' : review_contents
+    'review' : reply_list
     }
-        
+
+    print(data)
+    
+    browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleTopBtns > div.right_area > a.BaseButton.btn_next.BaseButton--skinGray.size_default').click() #이전글 옆다음글 버튼 클릭
+    time.sleep(1)    
+    
+
     collection.insert_one(data)
-    # browser.find_element(by=By.CSS_SELECTOR, value='a.BaseButton.btn_next').click() #다음글 버튼 클릭
-    # time.sleep(3)    
+
         
 
 browser.close()
