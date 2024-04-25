@@ -89,13 +89,15 @@ while True:
     }
 
     print(data)
-    
-    browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleTopBtns > div.right_area > a.BaseButton.btn_next.BaseButton--skinGray.size_default').click() #이전글 옆다음글 버튼 클릭
-    time.sleep(1)    
+    try :
+        browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleTopBtns > div.right_area > a.BaseButton.btn_next.BaseButton--skinGray.size_default').click() #다음글 버튼 클릭
+    except :
+        browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div > div.guide_btns > a:nth-child(2) > span').click() # 회원 등급 제한 걸릴 시 '다음글 보기'버튼 클릭
+    time.sleep(2)    
     
 
     collection.insert_one(data)
 
-        
+
 
 browser.close()
