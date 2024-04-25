@@ -21,7 +21,7 @@ mongoClient = MongoClient("mongodb://trainings.iptime.org:45003/")
 # database 연결
 database = mongoClient["data_analysis"]
 # collection 작업
-collection = database['persona1_navercafe_parkinsons']
+collection = database['persona1_navercafe_rheumatism']
 
 # 로그인 창
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
@@ -43,18 +43,17 @@ browser.execute_script("document.getElementsByName('pw')[0].value = \'" + pw + "
 browser.find_element(by=By.CSS_SELECTOR, value='.btn_login').click() #로그인 버튼 클릭
 time.sleep(1)
 
-browser.get('https://cafe.naver.com/parkinson777') # 네이버 카페 접속(파킨슨병)
+browser.get('https://cafe.naver.com/friendshift/') # 네이버 카페 접속(강직성척추염연합회)
 time.sleep(1)
 
-browser.find_element(by=By.CSS_SELECTOR, value='#menuLink3').click() # 자유로운글 게시판 클릭
-# #group9 > li:nth-child(3)
+browser.find_element(by=By.CSS_SELECTOR, value='#menuLink87').click() # 류마티스, 자가면역질환 게시판 클릭
 time.sleep(1)
 
 
 browser.switch_to.frame('cafe_main') #프레임 전환
 time.sleep(1)
 
-browser.find_element(by=By.CSS_SELECTOR, value='#main-area > div:nth-child(4) > table > tbody > tr:nth-child(1) > td.td_article > div.board-list > div > a.article').click() # 게시글 클릭
+browser.find_element(by=By.CSS_SELECTOR, value='#main-area > div:nth-child(5) > table > tbody > tr:nth-child(1) > td.td_article > div.board-list > div > a.article').click() # 게시글 클릭
 time.sleep(1)
 
 
@@ -81,7 +80,7 @@ while True:
         pass
 
     data={
-    'cafe' : '파킨슨병',  # 카페 이름
+    'cafe' : '강직성척추염연합회',  # 카페 이름
     'title' : title,
     'name' : name,
     'date' : date,
