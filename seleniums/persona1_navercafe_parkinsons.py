@@ -26,8 +26,6 @@ mongoClient = MongoClient("mongodb://trainings.iptime.org:45003/")
 database = mongoClient["data_analysis"]
 # collection 작업
 collection = database['persona1_navercafe_parkinsons']
-# 로그인 창
-# browser.switch_to.frame('cafe_main')
 
 # 로그인 창
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
@@ -66,7 +64,7 @@ time.sleep(1)
 
 # review_contents = []  # 댓글         
 # reply = [] # 댓글의 댓글
-for i in range():
+while True:
     try :
         time.sleep(2)
         title=browser.find_element(by=By.CSS_SELECTOR, value='#app > div > div > div.ArticleContentBox > div.article_header > div.ArticleTitle > div > h3').text # 글 제목 추출

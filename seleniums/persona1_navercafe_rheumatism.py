@@ -23,18 +23,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from pymongo import MongoClient
 mongoClient = MongoClient("mongodb://trainings.iptime.org:45003/")
 # database 연결
-database = mongoClient["rarefield"]
+database = mongoClient["data_analysis"]
 # collection 작업
 collection = database['persona1_navercafe_rheumatism']
 
-# browser.switch_to.frame('cafe_main')
-
 # 로그인 창
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
-time.sleep(5)
+time.sleep(2)
 
-my_id='tm2372'
-my_pw='gene9211eurevan'
 
 #자바스크립트로 우회하여 아이디와 비밀번호 값 넘겨줌
 browser.execute_script("document.getElementsByName('id')[0].value = \'" + my_id + "\'") 

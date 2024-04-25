@@ -33,9 +33,6 @@ collection = database['persona1_navercafe_neurofibromatosis']
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
 time.sleep(5)
 
-my_id='tm2372'
-my_pw='gene9211eurevan'
-
 #자바스크립트로 우회하여 아이디와 비밀번호 값 넘겨줌
 browser.execute_script("document.getElementsByName('id')[0].value = \'" + my_id + "\'") 
 browser.execute_script("document.getElementsByName('pw')[0].value = \'" + my_pw + "\'")
