@@ -11,8 +11,6 @@ capabilities = browser.capabilities
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 
-# Chromebrowser 실행
-# from selenium.common.exceptions import NoSuchElementException, NoSuchWindowException    # Element : 웹요소 찾지 못할 때 / Window : 창이 없거나 찾을 수 없을 때
 
 # - 정보 획득
 # from selenium.webbrowser.support.ui import Select      # Select : dropdown 메뉴 다루는 클래스
@@ -23,19 +21,25 @@ from selenium.webdriver.support import expected_conditions as EC
 from pymongo import MongoClient
 mongoClient = MongoClient("mongodb://trainings.iptime.org:45003/")
 # database 연결
-database = mongoClient["rarefield"]
+database = mongoClient["data_analysis"]
 # collection 작업
 collection = database['persona1_navercafe_neurofibromatosis']
 
-# browser.switch_to.frame('cafe_main')
-
 # 로그인 창
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
-time.sleep(5)
+time.sleep(2)
+
+from dotenv import load_dotenv
+import os
+# 환경변수 불러오기
+load_dotenv()
+# 로그인 계정 불러오기
+id = os.getenv('id')
+pw = os.getenv('pw')
 
 #자바스크립트로 우회하여 아이디와 비밀번호 값 넘겨줌
-browser.execute_script("document.getElementsByName('id')[0].value = \'" + my_id + "\'") 
-browser.execute_script("document.getElementsByName('pw')[0].value = \'" + my_pw + "\'")
+browser.execute_script("document.getElementsByName('id')[0].value = \'" + id + "\'") 
+browser.execute_script("document.getElementsByName('pw')[0].value = \'" + pw + "\'")
 
 browser.find_element(by=By.CSS_SELECTOR, value='.btn_login').click() #로그인 버튼 클릭
 time.sleep(2)

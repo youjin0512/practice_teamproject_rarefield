@@ -23,7 +23,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from pymongo import MongoClient
 mongoClient = MongoClient("mongodb://trainings.iptime.org:45003/")
 # database 연결
-database = mongoClient["rarefield"]
+database = mongoClient["data_analysis"]
 # collection 작업
 collection = database['persona1_navercafe_guillainbarre']
 
@@ -31,11 +31,20 @@ collection = database['persona1_navercafe_guillainbarre']
 
 # 로그인 창
 browser.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
-time.sleep(5)
+time.sleep(2)
+
+from dotenv import load_dotenv
+import os
+# 환경변수 불러오기
+load_dotenv()
+# 로그인 계정 불러오기
+id = os.getenv('id')
+pw = os.getenv('pw')
 
 #자바스크립트로 우회하여 아이디와 비밀번호 값 넘겨줌
-browser.execute_script("document.getElementsByName('id')[0].value = \'" + my_id + "\'") 
-browser.execute_script("document.getElementsByName('pw')[0].value = \'" + my_pw + "\'")
+browser.execute_script("document.getElementsByName('id')[0].value = \'" + id + "\'") 
+browser.execute_script("document.getElementsByName('pw')[0].value = \'" + pw + "\'")
+
 
 browser.find_element(by=By.CSS_SELECTOR, value='.btn_login').click() #로그인 버튼 클릭
 time.sleep(2)
